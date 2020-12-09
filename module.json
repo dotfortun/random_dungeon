@@ -1,0 +1,12 @@
+{
+    "name": "random_dungeon",
+    "title": "Random Dungeon Layout Creator",
+    "description": "A module to generate random (or randumb) dungeons.",
+    "author": "dotfortun",
+    "version": "0.0.1",
+    "minimumCoreVersion": "0.7.0",
+    "scripts": [
+        "scripts/main.js",
+        "scripts/generate.js"
+    ]
+  }
