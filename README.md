@@ -1,4 +1,4 @@
-##Foundry Random Dungeon Generator
+## Foundry Random Dungeon Generator
 
 Foundry API documentation: https://foundryvtt.com/api/index.html
 
