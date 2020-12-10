@@ -1,1 +1,1 @@
-Foundry Combat Logger
+Foundry Random Dungeon Generator
