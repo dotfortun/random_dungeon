@@ -12,8 +12,8 @@ class Level {
         };
 
         this.tiles = {
-            height: Math.floor(this.pixels.grid/this.pixels.height),
-            width: Math.floor(this.pixels.grid/this.pixels.width)
+            height: Math.floor(this.pixels.height/this.pixels.grid),
+            width: Math.floor(this.pixels.width/this.pixels.grid)
         };
 
         this.map = {
@@ -29,43 +29,44 @@ class Level {
                 Better way to do this: See if current rect is tall or wide,
                 split long dimension in half.
              */
-            if (grid.r - grid.l > grid.d - grid.generateLayout) {
+            if (grid.right - grid.left > grid.down - grid.up) {
                 grid.subgrids.push({
                     left: 0,
-                    right: Math.floor(grid.r/2),
+                    right: Math.floor(grid.right/2),
                     up: 0,
-                    down: Math.floor(grid.d/2),
+                    down: Math.floor(grid.down/2),
                     subgrids:[]
                 })
                 grid.subgrids.push({
-                    left: Math.floor(grid.r/2),
-                    right: grid.r,
-                    up: Math.floor(grid.d/2),
-                    down: grid.d,
+                    left: Math.floor(grid.right/2),
+                    right: grid.right,
+                    up: Math.floor(grid.down/2),
+                    down: grid.down,
                     subgrids:[]
                 })
             } else {
                 grid.subgrids.push({
                     left: 0,
-                    right: Math.floor(grid.r/2),
+                    right: Math.floor(grid.right/2),
                     up: 0,
-                    down: Math.floor(grid.d/2),
+                    down: Math.floor(grid.down/2),
                     subgrids:[]
                 })
                 grid.subgrids.push({
-                    left: Math.floor(grid.r/2),
-                    right: grid.r,
-                    up: Math.floor(grid.d/2),
-                    down: grid.d,
+                    left: Math.floor(grid.right/2),
+                    right: grid.right,
+                    up: Math.floor(grid.down/2),
+                    down: grid.down,
                     subgrids:[]
                 })
             }
             
             grid.subgrids.forEach(sub => {
-                this.generateLevelBSP(depth--, sub);
+                this.generateLevelBSP(depth-1, sub);
             });
+
+            return grid;
         }
-        return grid;
     }
 
     generateLayout() {
