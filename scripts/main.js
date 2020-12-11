@@ -23,37 +23,40 @@ class Level {
         };
     }
 
-    generateLevelBSP(depth=5, grid={ l:0, r:this.tiles.width, t:0, b:this.tiles.height, subgrids:[]}) {
+    generateLevelBSP(depth=5, grid={ left:0, right:this.tiles.width, up:0, down:this.tiles.height, subgrids:[]}) {
         if (depth >= 0) {
-            // This is a terrible way to decide if a room should be tall or wide.
-            if (depth%2) {
+            /* 
+                Better way to do this: See if current rect is tall or wide,
+                split long dimension in half.
+             */
+            if (grid.r - grid.l > grid.d - grid.generateLayout) {
                 grid.subgrids.push({
-                    l: 0,
-                    r: Math.floor(grid.r/2),
-                    t: 0,
-                    b: Math.floor(grid.b/2),
+                    left: 0,
+                    right: Math.floor(grid.r/2),
+                    up: 0,
+                    down: Math.floor(grid.d/2),
                     subgrids:[]
                 })
                 grid.subgrids.push({
-                    l: Math.floor(grid.r/2),
-                    r: grid.r,
-                    t: Math.floor(grid.b/2),
-                    b: grid.b,
+                    left: Math.floor(grid.r/2),
+                    right: grid.r,
+                    up: Math.floor(grid.d/2),
+                    down: grid.d,
                     subgrids:[]
                 })
             } else {
                 grid.subgrids.push({
-                    l: 0,
-                    r: Math.floor(grid.r/2),
-                    t: 0,
-                    b: Math.floor(grid.b/2),
+                    left: 0,
+                    right: Math.floor(grid.r/2),
+                    up: 0,
+                    down: Math.floor(grid.d/2),
                     subgrids:[]
                 })
                 grid.subgrids.push({
-                    l: Math.floor(grid.r/2),
-                    r: grid.r,
-                    t: Math.floor(grid.b/2),
-                    b: grid.b,
+                    left: Math.floor(grid.r/2),
+                    right: grid.r,
+                    up: Math.floor(grid.d/2),
+                    down: grid.d,
                     subgrids:[]
                 })
             }
