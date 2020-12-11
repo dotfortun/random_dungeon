@@ -23,7 +23,7 @@ class Level {
         };
     }
 
-    generateLevelBSP(depth=5, grid={ left:0, right:this.tiles.width, up:0, down:this.tiles.height, subgrids:[]}) {
+    generateBSP(depth=5, grid={ left:0, right:this.tiles.width, up:0, down:this.tiles.height, subgrids:[]}) {
         if (depth >= 0) {
             /* 
                 Better way to do this: See if current rect is tall or wide,
