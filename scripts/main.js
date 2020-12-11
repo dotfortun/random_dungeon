@@ -23,46 +23,45 @@ class Level {
         };
     }
 
-    generateLevelBSP(depth=1, grid={ l:0, r:this.tiles.width, t:0, b:this.tiles.height, subgrids:[]}) {
-        if (depth < 0) {
-            return;
+    generateLevelBSP(depth=5, grid={ l:0, r:this.tiles.width, t:0, b:this.tiles.height, subgrids:[]}) {
+        if (depth >= 0) {
+            // This is a terrible way to decide if a room should be tall or wide.
+            if (depth%2) {
+                grid.subgrids.push({
+                    l: 0,
+                    r: Math.floor(grid.r/2),
+                    t: 0,
+                    b: Math.floor(grid.b/2),
+                    subgrids:[]
+                })
+                grid.subgrids.push({
+                    l: Math.floor(grid.r/2),
+                    r: grid.r,
+                    t: Math.floor(grid.b/2),
+                    b: grid.b,
+                    subgrids:[]
+                })
+            } else {
+                grid.subgrids.push({
+                    l: 0,
+                    r: Math.floor(grid.r/2),
+                    t: 0,
+                    b: Math.floor(grid.b/2),
+                    subgrids:[]
+                })
+                grid.subgrids.push({
+                    l: Math.floor(grid.r/2),
+                    r: grid.r,
+                    t: Math.floor(grid.b/2),
+                    b: grid.b,
+                    subgrids:[]
+                })
+            }
+            
+            grid.subgrids.forEach(sub => {
+                this.generateLevelBSP(depth--, sub);
+            });
         }
-        if (depth%2) {
-            grid.subgrids.push({
-                l: 0,
-                r: Math.floor(grid.r/2),
-                t: 0,
-                b: Math.floor(grid.b/2),
-                subgrids:[]
-            })
-            grid.subgrids.push({
-                l: Math.floor(grid.r/2),
-                r: grid.r,
-                t: Math.floor(grid.b/2),
-                b: grid.b,
-                subgrids:[]
-            })
-        } else {
-            grid.subgrids.push({
-                l: 0,
-                r: Math.floor(grid.r/2),
-                t: 0,
-                b: Math.floor(grid.b/2),
-                subgrids:[]
-            })
-            grid.subgrids.push({
-                l: Math.floor(grid.r/2),
-                r: grid.r,
-                t: Math.floor(grid.b/2),
-                b: grid.b,
-                subgrids:[]
-            })
-        }
-        
-        grid.subgrids.forEach(sub => {
-            this.generateLevelBSP(depth--, sub);
-        });
-
         return grid;
     }
 
