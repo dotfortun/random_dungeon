@@ -19,7 +19,7 @@ class Level {
         this.map = {
             cells: new Array(this.tiles.height * this.tiles.width),
             walls: [],
-            tiles: new Array(this.tiles.height * this.tiles.width)
+            tiles: []
         };
 
         this.layout = [];
@@ -76,33 +76,68 @@ class Level {
 
     generateLayout() {
         // Just places random tiles for now, as a test.
-        // for (let y = 0; y < this.height; y++) {
-        //     for (let x = 0; x < this.width; x++) {
-        //         let cell_type = Math.floor(Math.random() * Math.floor(3));
-        //         this.cells[x+y*this.width] = cell_type;
-        //         this.tiles[x+y*this.width] = Tile.create({
-        //             img: "./modules/random_dungeon/assets/" + cell_type + ".png",
-        //             width: this.tile_width,
-        //             height: this.tile_height,
-        //             scale: 1,
-        //             x: x*this.tile_width,
-        //             y: y*this.tile_width,
-        //             rotation: 0,
-        //             hidden: false,
-        //             locked: false
-        //         });
-        //     }
-        // }
+        this.layout.forEach(room => {
+            for (let x = room.left; x < room.right; x++) {
+                this.map.tiles.push(Tile.create({
+                    img: "./modules/random_dungeon/assets/0.png",
+                    width: this.pixels.grid,
+                    height: this.pixels.grid,
+                    scale: 1,
+                    x: (this.pixels.padding * this.pixels.width) + x * this.pixels.grid,
+                    y: (this.pixels.padding * this.pixels.height) + room.up * this.pixels.grid,
+                    rotation: 0,
+                    hidden: false,
+                    locked: false
+                }));
+                this.map.tiles.push(Tile.create({
+                    img: "./modules/random_dungeon/assets/0.png",
+                    width: this.pixels.grid,
+                    height: this.pixels.grid,
+                    scale: 1,
+                    x: (this.pixels.padding * this.pixels.width) + x * this.pixels.grid,
+                    y: (this.pixels.padding * this.pixels.height) + room.down * this.pixels.grid,
+                    rotation: 0,
+                    hidden: false,
+                    locked: false
+                }));
+            }
+            for (let y = room.top; y < room.bottom; y++) {
+                this.map.tiles.push(Tile.create({
+                    img: "./modules/random_dungeon/assets/1.png",
+                    width: this.pixels.grid,
+                    height: this.pixels.grid,
+                    scale: 1,
+                    x: (this.pixels.padding * this.pixels.width) + room.left * this.pixels.grid,
+                    y: (this.pixels.padding * this.pixels.height) + y * this.pixels.grid,
+                    rotation: 0,
+                    hidden: false,
+                    locked: false
+                }));
+                this.map.tiles.push(Tile.create({
+                    img: "./modules/random_dungeon/assets/1.png",
+                    width: this.pixels.grid,
+                    height: this.pixels.grid,
+                    scale: 1,
+                    x: (this.pixels.padding * this.pixels.width) + room.right * this.pixels.grid,
+                    y: (this.pixels.padding * this.pixels.height) + y * this.pixels.grid,
+                    rotation: 0,
+                    hidden: false,
+                    locked: false
+                }));
+            }
+        });
     }
 
     render(scene) {
-        scene.update({tiles: this.tiles});
+        scene.update({tiles: this.map.tiles});
     }
 }
 
 Hooks.on("ready", _ => {
     console.log("RNG Dungeons: Ding.");
-    l = new Level(game.scenes.active.data);
-    // l.generate();   
-    // l.render(game.scenes.active.data);
+    let l = new Level(game.scenes.active.data);
+    let bsp = l.generateBSP(depth=3);
+    l.flattenBSPTree(bsp);
+    l.generateLayout();
+    // l.render(game.scenes.active);
 });
