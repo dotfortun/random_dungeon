@@ -21,14 +21,12 @@ class Level {
             walls: [],
             tiles: new Array(this.tiles.height * this.tiles.width)
         };
+
+        this.layout = [];
     }
 
     generateBSP(depth=5, grid={ left:0, right:this.tiles.width, up:0, down:this.tiles.height, subgrids:[]}) {
-        if (depth >= 0) {
-            /* 
-                Better way to do this: See if current rect is tall or wide,
-                split long dimension in half.
-             */
+        if (depth > 0) {
             if (grid.right - grid.left > grid.down - grid.up) {
                 grid.subgrids.push({
                     left: 0,
@@ -62,11 +60,18 @@ class Level {
             }
             
             grid.subgrids.forEach(sub => {
-                this.generateLevelBSP(depth-1, sub);
+                this.generateBSP(depth-1, sub);
             });
 
             return grid;
         }
+    }
+
+    flattenBSPTree(bsp_tree) {
+        this.layout.push(bsp_tree);
+        bsp_tree.subgrids.forEach(sub => {
+            this.flattenBSPTree(sub);
+        });    
     }
 
     generateLayout() {
