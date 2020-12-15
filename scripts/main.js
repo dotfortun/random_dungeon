@@ -26,6 +26,13 @@ class Room {
         }
     }
 
+    grow() {
+        this.walls.up--;
+        this.walls.right++;
+        this.walls.down++;
+        this.walls.left--;
+    }
+
     overlap(other) {
         if (other.walls.bottom < this.walls.top || other.walls.top > this.walls.bottom) {
             return false;
@@ -58,6 +65,16 @@ class Level {
         };
 
         this.layout = [];
+    }
+
+    generateGrowingRooms(rooms=6) {
+        let room_set = new Set();
+        while (room_set.size < rooms) {
+            let x = getRandomInt(this.tiles.width);
+            let y = getRandomInt(this.tiles.height);
+            room_set.add(new Room(x, y, x, y));
+        }
+        console.warn(room_set);
     }
 
     generateBSP(depth=5, grid={ left:0, right:this.tiles.width, up:0, down:this.tiles.height, subgrids:[]}) {
@@ -185,9 +202,10 @@ class Level {
 Hooks.on("ready", _ => {
     console.warn("RNG Dungeons: Ding.");
     let l = new Level(game.scenes.active.data);
-    let bsp = l.generateBSP(depth=2);
-    l.flattenBSPTree(bsp);
+    // let bsp = l.generateBSP(depth=2);
+    // l.flattenBSPTree(bsp);
     // l.generateLayout();
+    l.generateGrowingRooms();
     console.warn(l);
     // l.render(game.scenes.active);
 });
