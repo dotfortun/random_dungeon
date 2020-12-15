@@ -26,15 +26,32 @@ class Room {
         }
     }
 
-    grow() {
-        this.walls.up--;
-        this.walls.right++;
-        this.walls.down++;
-        this.walls.left--;
+    grow(sides={up: true, right: true, down: true, left: true}) {
+        if (sides.up){
+            this.walls.up--;
+        } else if (sides.right) {
+            this.walls.right++;
+        } else if (sides.down) {
+            this.walls.down++;
+        } else if (sides.left) {
+            this.walls.left--;
+        }
     }
 
-    overlap(other) {
-        if (other.walls.bottom < this.walls.top || other.walls.top > this.walls.bottom) {
+    shrink(sides={up: true, right: true, down: true, left: true}) {
+        if (sides.up){
+            this.walls.up++;
+        } else if (sides.right) {
+            this.walls.right--;
+        } else if (sides.down) {
+            this.walls.down--;
+        } else if (sides.left) {
+            this.walls.left++;
+        }
+    }
+
+    overlaps(other) {
+        if (other.walls.down < this.walls.up || other.walls.up > this.walls.down) {
             return false;
         }
         if (other.walls.left > this.walls.right || other.walls.right < this.walls.left) {
@@ -67,14 +84,27 @@ class Level {
         this.layout = [];
     }
 
-    generateGrowingRooms(rooms=6) {
+    generateGrowingRooms(rooms=6, maxGrowth=12) {
         let room_set = new Set();
         while (room_set.size < rooms) {
             let x = getRandomInt(this.tiles.width);
             let y = getRandomInt(this.tiles.height);
             room_set.add(new Room(x, y, x, y));
         }
-        console.warn(room_set);
+
+        let dirs = ["up", "right", "left", "down"];
+        for (let i=0; i < maxGrowth; i++) {
+            room_set.forEach(room => {
+                room.grow(dirs[i%4]);
+                room_set.forEach(other => {
+                    if (room.overlaps(other)) {
+                        room.shrink(dirs[i%4]);
+                    }
+                });
+            });
+        }
+
+        return Array.from(room_set);
     }
 
     generateBSP(depth=5, grid={ left:0, right:this.tiles.width, up:0, down:this.tiles.height, subgrids:[]}) {
@@ -195,17 +225,37 @@ class Level {
     }
 
     render(scene) {
-        scene.update({tiles: this.map.tiles});
+        scene.update({tiles: this.layout});
     }
 }
 
 Hooks.on("ready", _ => {
     console.warn("RNG Dungeons: Ding.");
-    let l = new Level(game.scenes.active.data);
+    var l = new Level(game.scenes.active.data);
     // let bsp = l.generateBSP(depth=2);
     // l.flattenBSPTree(bsp);
     // l.generateLayout();
-    l.generateGrowingRooms();
-    console.warn(l);
-    // l.render(game.scenes.active);
+    var rooms = l.generateGrowingRooms();
+    var game_tiles = [];
+    rooms.forEach(room => {
+        console.warn(room)
+        for (let x = room.walls.left; x < room.walls.right; x++) {
+            for (let y = room.walls.up; y < room.walls.down; y++) {
+                console.warn("in xy loop")
+                game_tiles.push(Tile.create({
+                    img: "./modules/random_dungeon/assets/0.png",
+                    width: l.pixels.grid,
+                    height: l.pixels.grid,
+                    scale: 1,
+                    x: (l.pixels.padding * l.pixels.width) + x * l.pixels.grid,
+                    y: (l.pixels.padding * l.pixels.height) + y * l.pixels.grid,
+                    rotation: 0,
+                    hidden: false,
+                    locked: false
+                }));
+            }
+        }
+    });
+    l.layout = game_tiles;
+    l.render(game.scenes.active);
 });
