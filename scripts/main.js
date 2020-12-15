@@ -77,49 +77,49 @@ class Level {
     generateLayout() {
         // Just places random tiles for now, as a test.
         this.layout.forEach(room => {
-            for (let x = room.left; x < room.right; x++) {
-                this.map.tiles.push(Tile.create({
-                    img: "./modules/random_dungeon/assets/0.png",
-                    width: this.pixels.grid,
-                    height: this.pixels.grid,
-                    scale: 1,
-                    x: (this.pixels.padding * this.pixels.width) + x * this.pixels.grid,
-                    y: (this.pixels.padding * this.pixels.height) + room.up * this.pixels.grid,
-                    rotation: 0,
-                    hidden: false,
-                    locked: false
-                }));
-                this.map.tiles.push(Tile.create({
-                    img: "./modules/random_dungeon/assets/0.png",
-                    width: this.pixels.grid,
-                    height: this.pixels.grid,
-                    scale: 1,
-                    x: (this.pixels.padding * this.pixels.width) + x * this.pixels.grid,
-                    y: (this.pixels.padding * this.pixels.height) + room.down * this.pixels.grid,
-                    rotation: 0,
-                    hidden: false,
-                    locked: false
-                }));
-            }
+            // for (let x = room.left; x < room.right; x++) {
+            //     this.map.tiles.push(Tile.create({
+            //         img: "./modules/random_dungeon/assets/0.png",
+            //         width: this.pixels.grid,
+            //         height: this.pixels.grid,
+            //         scale: 1,
+            //         x: (this.pixels.padding * this.pixels.width) + x * this.pixels.grid,
+            //         y: (this.pixels.padding * this.pixels.height) + room.up * this.pixels.grid,
+            //         rotation: 0,
+            //         hidden: false,
+            //         locked: false
+            //     }));
+            //     this.map.tiles.push(Tile.create({
+            //         img: "./modules/random_dungeon/assets/0.png",
+            //         width: this.pixels.grid,
+            //         height: this.pixels.grid,
+            //         scale: 1,
+            //         x: (this.pixels.padding * this.pixels.width) + (x * this.pixels.grid),
+            //         y: (this.pixels.padding * this.pixels.height) + (room.down * this.pixels.grid),
+            //         rotation: 0,
+            //         hidden: false,
+            //         locked: false
+            //     }));
+            // }
             for (let y = room.top; y < room.bottom; y++) {
                 this.map.tiles.push(Tile.create({
-                    img: "./modules/random_dungeon/assets/1.png",
+                    img: "./modules/random_dungeon/assets/0.png",
                     width: this.pixels.grid,
                     height: this.pixels.grid,
                     scale: 1,
-                    x: (this.pixels.padding * this.pixels.width) + room.left * this.pixels.grid,
-                    y: (this.pixels.padding * this.pixels.height) + y * this.pixels.grid,
+                    x: (this.pixels.padding * this.pixels.width) + (room.left * this.pixels.grid),
+                    y: (this.pixels.padding * this.pixels.height) + (y * this.pixels.grid),
                     rotation: 0,
                     hidden: false,
                     locked: false
                 }));
                 this.map.tiles.push(Tile.create({
-                    img: "./modules/random_dungeon/assets/1.png",
+                    img: "./modules/random_dungeon/assets/0.png",
                     width: this.pixels.grid,
                     height: this.pixels.grid,
                     scale: 1,
-                    x: (this.pixels.padding * this.pixels.width) + room.right * this.pixels.grid,
-                    y: (this.pixels.padding * this.pixels.height) + y * this.pixels.grid,
+                    x: (this.pixels.padding * this.pixels.width) + (room.right * this.pixels.grid),
+                    y: (this.pixels.padding * this.pixels.height) + (y * this.pixels.grid),
                     rotation: 0,
                     hidden: false,
                     locked: false
